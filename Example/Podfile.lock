@@ -1,0 +1,16 @@
+PODS:
+  - SimplePopUpMenu (0.1.0)
+
+DEPENDENCIES:
+  - SimplePopUpMenu (from `../`)
+
+EXTERNAL SOURCES:
+  SimplePopUpMenu:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  SimplePopUpMenu: a5cf281817479103174cd17233c91165b4098031
+
+PODFILE CHECKSUM: bd8e4f742cf8cf181d519d66c39150abca6fe0b1
+
+COCOAPODS: 1.8.4
