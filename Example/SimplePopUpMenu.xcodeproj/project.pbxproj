@@ -29,7 +29,7 @@
 
 /* Begin PBXFileReference section */
 		084550F62BBA91D7CDA348B5 /* Pods_SimplePopUpMenu_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimplePopUpMenu_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		10202120C2EF048E0CEE048A /* SimplePopUpMenu.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = SimplePopUpMenu.podspec; path = ../SimplePopUpMenu.podspec; sourceTree = "<group>"; };
+		10202120C2EF048E0CEE048A /* SimplePopUpMenu.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SimplePopUpMenu.podspec; path = ../SimplePopUpMenu.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		35BBA4A9CFD69C965F781A42 /* Pods-SimplePopUpMenu_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimplePopUpMenu_Tests.release.xcconfig"; path = "Target Support Files/Pods-SimplePopUpMenu_Tests/Pods-SimplePopUpMenu_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		4C7C21A1EBF4D96C5275DB94 /* Pods-SimplePopUpMenu_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimplePopUpMenu_Tests.debug.xcconfig"; path = "Target Support Files/Pods-SimplePopUpMenu_Tests/Pods-SimplePopUpMenu_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* SimplePopUpMenu_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimplePopUpMenu_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,8 +44,8 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		96F5A5A1972D9E144EDC41B4 /* Pods_SimplePopUpMenu_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SimplePopUpMenu_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A583F5EC8EC1F1E9387548A1 /* Pods-SimplePopUpMenu_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimplePopUpMenu_Example.release.xcconfig"; path = "Target Support Files/Pods-SimplePopUpMenu_Example/Pods-SimplePopUpMenu_Example.release.xcconfig"; sourceTree = "<group>"; };
-		AE5FAB504CC80B91C09AEB9B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		DE2F9A76AD60E2DD37AA24B5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		AE5FAB504CC80B91C09AEB9B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		DE2F9A76AD60E2DD37AA24B5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		F6FD9C7A71AA058C8F2D7BA5 /* Pods-SimplePopUpMenu_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SimplePopUpMenu_Example.debug.xcconfig"; path = "Target Support Files/Pods-SimplePopUpMenu_Example/Pods-SimplePopUpMenu_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -156,7 +156,6 @@
 				4C7C21A1EBF4D96C5275DB94 /* Pods-SimplePopUpMenu_Tests.debug.xcconfig */,
 				35BBA4A9CFD69C965F781A42 /* Pods-SimplePopUpMenu_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -227,6 +226,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -479,12 +479,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SimplePopUpMenu/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -494,12 +496,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = SimplePopUpMenu/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
