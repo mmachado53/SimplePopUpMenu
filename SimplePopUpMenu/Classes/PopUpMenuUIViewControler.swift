@@ -8,19 +8,28 @@ import UIKit
 
 public class PopUpMenuUIViewControler: UIViewController{
     
+    // MARK: GLOBAL VARS
+    public static var globalStyle:PopUpMenuStyle = PopUpMenuStyle()
     
     // MARK: dimens
-    private let cellHeight:CGFloat = 40
-    private let padding:CGFloat = 20
-    private let fontSize:CGFloat = 18.0
-    private let headerHeight = 40
+    fileprivate static let cellHeight:CGFloat = 40
+    fileprivate static let padding:CGFloat = 20
+    fileprivate static let fontSize:CGFloat = 18.0
+    fileprivate static let headerHeight = 40
     // MARK: identifier
     private var identifier:String = ""
     // MARK: items
     private var items:[PopUpMenuItem] = []
     // MARK: Colors
-    private var headerTextColor:UIColor = UIColor.white
-    private var headerBackgroundColor:UIColor = UIColor.black
+    public var style:PopUpMenuStyle?
+    private var currentStyle:PopUpMenuStyle {
+        get{
+            if let st:PopUpMenuStyle = self.style {
+                return st
+            }
+            return PopUpMenuUIViewControler.globalStyle
+        }
+    }
     // MARK: child views
     fileprivate let cellId = "cellId"
     private let tableView:UITableView = UITableView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
@@ -63,16 +72,17 @@ public class PopUpMenuUIViewControler: UIViewController{
         self.view.addSubview(titleLabel)
         self.titleLabel.text = self.title
         self.titleLabel.textAlignment = .center
-        self.titleLabel.textColor = headerTextColor
-        self.titleLabel.backgroundColor = headerBackgroundColor
-        configureConstraints(childView: titleLabel, top: 0, left: 0, right: 0, bottom: nil, height: CGFloat(headerHeight))
+        let st = currentStyle
+        self.titleLabel.textColor = st.headerTextColor
+        self.titleLabel.backgroundColor = st.headerColor
+        configureConstraints(childView: titleLabel, top: 0, left: 0, right: 0, bottom: nil, height: CGFloat(PopUpMenuUIViewControler.headerHeight),width: nil)
     }
     
     private func configureTableView(){
         self.view.addSubview(tableView)
-        let top:CGFloat = visibleHeader ? CGFloat(headerHeight) + 5 : 10
-        configureConstraints(childView: tableView, top: top, left: 0, right: 0, bottom: -10, height: nil)
-        tableView.rowHeight = CGFloat(cellHeight)
+        let top:CGFloat = visibleHeader ? CGFloat(PopUpMenuUIViewControler.headerHeight) + 5 : 10
+        configureConstraints(childView: tableView, top: top, left: 0, right: 0, bottom: -10, height: nil,width: nil)
+        tableView.rowHeight = CGFloat(PopUpMenuUIViewControler.cellHeight)
         tableView.backgroundColor = UIColor.clear
         tableView.separatorStyle = UITableViewCellSeparatorStyle.none
         tableView.delegate = self
@@ -91,12 +101,14 @@ public class PopUpMenuUIViewControler: UIViewController{
         sourceView:Any,
         permittedArrowDirections:UIPopoverArrowDirection = .any,
         sourceRect:CGRect? = nil){
+        
         self.identifier = menuIdentifier
         self.items = items
         self.calculateContentSizes()
         self.modalPresentationStyle = UIModalPresentationStyle.popover
         self.popoverPresentationController?.delegate = self
-        self.popoverPresentationController?.backgroundColor = UIColor.white
+        let st:PopUpMenuStyle = self.currentStyle
+        self.popoverPresentationController?.backgroundColor = st.baseColor
         self.popoverPresentationController?.permittedArrowDirections = permittedArrowDirections
         var sourceViewWidth:CGFloat = 0
         var sourceViewHeight:CGFloat = 0
@@ -119,7 +131,7 @@ public class PopUpMenuUIViewControler: UIViewController{
         
     }
     
-    func setHandler( handler:@escaping PopUpHandler){
+    public func setHandler( handler:@escaping PopUpHandler){
         self.popUpHandler = handler
     }
     
@@ -128,18 +140,18 @@ public class PopUpMenuUIViewControler: UIViewController{
         for item in self.items{
             let myString:NSString = "   \(item.title)" as NSString
             
-            let fsize: CGSize = myString.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: fontSize)])
-            let iconWidth = item.uiImage == nil ? 0 : cellHeight
+            let fsize: CGSize = myString.size(withAttributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: PopUpMenuUIViewControler.fontSize)])
+            let iconWidth = item.uiImage == nil ? 0 : PopUpMenuUIViewControler.cellHeight
             if(width<fsize.width+iconWidth){
                 width = fsize.width+iconWidth
             }
         }
-        width = width + (padding*2.0)
+        width = width + (PopUpMenuUIViewControler.padding*2.0)
         let height:CGFloat
         if(visibleHeader){
-            height = (CGFloat(items.count) * cellHeight) + (10.0*2.0) + CGFloat(headerHeight)
+            height = (CGFloat(items.count) * PopUpMenuUIViewControler.cellHeight) + (10.0*2.0) + CGFloat(PopUpMenuUIViewControler.headerHeight)
         }else{
-            height = (CGFloat(items.count) * cellHeight) + (10.0*2.0)
+            height = (CGFloat(items.count) * PopUpMenuUIViewControler.cellHeight) + (10.0*2.0)
         }
         
         self.preferredContentSize = CGSize(width: width, height: height)
@@ -155,9 +167,9 @@ extension PopUpMenuUIViewControler:UITableViewDataSource, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PopUpMenuTableViewCell
         let item:PopUpMenuItem = self.items[indexPath.row]
-        cell.button.setTitle("  \(item.title)", for: .normal)
-        cell.button.setImage(item.uiImage, for: .normal)
-        cell.applyPaddings(self.padding)
+        cell.label.text = "  \(item.title)"
+        cell.setIcon(iconImage: item.uiImage)
+        cell.applyStyle(style: self.currentStyle)
         cell.separator.isHidden = indexPath.row == self.items.count - 1
         return cell
     }
@@ -184,34 +196,41 @@ extension PopUpMenuUIViewControler : UIPopoverPresentationControllerDelegate{
 }
 
 class PopUpMenuTableViewCell:UITableViewCell{
+    let label:UILabel = UILabel()
+    let iconImageView:UIImageView = UIImageView()
     
-    let button:UIButton = UIButton(type: .custom )
     public let separator:UIView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     
-    private var buttonConstraints:[String:NSLayoutConstraint]?
+    private var labelConstraints:[String:NSLayoutConstraint]?
+    private var iconWidth:CGFloat = PopUpMenuUIViewControler.cellHeight - 16
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(button)
+        self.iconImageView.contentMode = .scaleAspectFit
+        addSubview(label)
+        addSubview(iconImageView)
         addSubview(separator)
-        separator.backgroundColor = UIColor.black.withAlphaComponent(0.15)
         self.backgroundColor = UIColor.clear
-        button.setTitle("  ", for: .normal)
-        button.setTitleColor(UIColor.black, for: .normal)
-        button.contentHorizontalAlignment = .left
-        button.titleLabel?.font = button.titleLabel?.font.withSize(18)
-        button.isUserInteractionEnabled = false
-        self.buttonConstraints = configureConstraints(childView: button, top: 0, left: 0, right: 0, bottom: 0, height:
-            nil)
-        configureConstraints(childView: separator, top: nil, left: 0, right: 0, bottom: 0, height: 0.5)
-        let selectedCellView:UIView = UIView()
-        selectedCellView.backgroundColor = UIColor.black.withAlphaComponent(0.1)
-        self.selectedBackgroundView = selectedCellView
+        label.font = UIFont.systemFont(ofSize: PopUpMenuUIViewControler.fontSize)
+        self.labelConstraints = configureConstraints(childView: label, top: 0, left: 0, right: 0, bottom: 0, height:
+            nil, width: nil)
+        configureConstraints(childView: iconImageView, top: 0, left: PopUpMenuUIViewControler.padding, right: nil, bottom: 0, height:nil , width: iconWidth)
+        configureConstraints(childView: separator, top: nil, left: 0, right: 0, bottom: 0, height: 0.5, width: nil)
+        self.selectedBackgroundView = UIView()
         
     }
     
-    func applyPaddings(_ padding:CGFloat){
-        buttonConstraints?["leading"]?.constant = padding
-        buttonConstraints?["trailing"]?.constant = padding * -1
+    func setIcon(iconImage:UIImage?){
+        self.iconImageView.image = iconImage
+
+        labelConstraints?["leading"]?.constant = iconImage != nil ? self.iconWidth + 2 + PopUpMenuUIViewControler.padding : PopUpMenuUIViewControler.padding
+        labelConstraints?["trailing"]?.constant = PopUpMenuUIViewControler.padding * -1
+    }
+    
+    func applyStyle(style:PopUpMenuStyle){
+        self.selectedBackgroundView?.backgroundColor = style.selectedBackgroundColor
+        self.separator.backgroundColor = style.itemSeparatorColor
+        self.label.textColor = style.textColor
+        self.iconImageView.tintColor = style.textColor
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -224,9 +243,14 @@ class PopUpMenuTableViewCell:UITableViewCell{
 public class PopUpMenuItem{
     var uiImage:UIImage?
     var title:String = ""
-    public init(title:String,uiImage:UIImage? = nil) {
+    var tintImage:Bool = false
+    public init(title:String,uiImage:UIImage? = nil,tintImage:Bool = false) {
         self.title = title
         self.uiImage = uiImage
+        self.tintImage = tintImage
+        if(self.tintImage){
+            self.uiImage = uiImage?.withRenderingMode(.alwaysTemplate)
+        }
     }
 }
 
@@ -234,7 +258,14 @@ public protocol PopUpMenuDelegate{
     func popupmenu(selectItem:Int,menuIdentifier:String)
 }
 
-@discardableResult fileprivate func configureConstraints(childView:UIView,top:CGFloat?,left:CGFloat,right:CGFloat,bottom:CGFloat?, height:CGFloat?) -> [String:NSLayoutConstraint]{
+@discardableResult fileprivate func configureConstraints(
+    childView:UIView,
+    top:CGFloat?,
+    left:CGFloat,
+    right:CGFloat?,
+    bottom:CGFloat?,
+    height:CGFloat?,
+    width:CGFloat?) -> [String:NSLayoutConstraint]{
     
     var result:[String:NSLayoutConstraint] = [:]
     
@@ -256,10 +287,13 @@ public protocol PopUpMenuDelegate{
         
         superView.addConstraint(constraint!)
         
-        constraint = NSLayoutConstraint(item: childView,attribute: NSLayoutAttribute.trailing,relatedBy: NSLayoutRelation.equal,toItem: superView,attribute: NSLayoutAttribute.trailing,multiplier: 1,constant: right)
-        result["trailing"] = constraint
+        if let r = right {
+            constraint = NSLayoutConstraint(item: childView,attribute: NSLayoutAttribute.trailing,relatedBy: NSLayoutRelation.equal,toItem: superView,attribute: NSLayoutAttribute.trailing,multiplier: 1,constant: r)
+            result["trailing"] = constraint
+            
+            superView.addConstraint(constraint!)
+        }
         
-        superView.addConstraint(constraint!)
         
         if let b = bottom {
             constraint = NSLayoutConstraint(item: childView,attribute: NSLayoutAttribute.bottom,relatedBy: NSLayoutRelation.equal,toItem: superView,attribute: NSLayoutAttribute.bottom,multiplier: 1,constant: b)
@@ -271,6 +305,12 @@ public protocol PopUpMenuDelegate{
             constraint = childView.heightAnchor.constraint(equalToConstant: h)
             constraint!.isActive = true
             result["height"] = constraint
+        }
+        
+        if let w = width {
+            constraint = childView.widthAnchor.constraint(equalToConstant: w)
+            constraint!.isActive = true
+            result["width"] = constraint
         }
         
         superView.updateConstraints()
