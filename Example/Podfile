@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'SimplePopUpMenu_Example' do
+  pod 'SimplePopUpMenu', :path => '../'
+
+  target 'SimplePopUpMenu_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
