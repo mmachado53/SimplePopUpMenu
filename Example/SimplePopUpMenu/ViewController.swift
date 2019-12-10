@@ -22,10 +22,20 @@ class ViewController: UIViewController {
     
     @IBAction func sampleClick(_ sender:UIButton){
         let p:PopUpMenuUIViewControler = PopUpMenuUIViewControler()
-        let uno:PopUpMenuItem = PopUpMenuItem(title: "Hola mundo1")
-        let dos:PopUpMenuItem = PopUpMenuItem(title: "Hola mundo3")
-        p.presentSelf(identifier: "menu1", viewController: self, items: [uno,dos], sourceView: sender,permittedArrowDirections: .down,sourceRect:CGRect(x: sender.frame.width / 2, y: 0, width: 0, height: 0) )
+        p.visibleHeader = true
+        p.title = "Title"
+    
+        let a:PopUpMenuItem = PopUpMenuItem(title: "Item A")
+        let b:PopUpMenuItem = PopUpMenuItem(title: "Item B")
+        p.showMenu(menuIdentifier: "menu1", viewController: self, items: [a,b], sourceView: sender,permittedArrowDirections: .right)
     }
 
+    @IBAction func navItemAction(_ sender:UIBarButtonItem){
+        let p:PopUpMenuUIViewControler = PopUpMenuUIViewControler()        
+        let a:PopUpMenuItem = PopUpMenuItem(title: "Item C")
+        let b:PopUpMenuItem = PopUpMenuItem(title: "Item D")
+        p.showMenu(menuIdentifier: "menu1", viewController: self, items: [a,b], sourceView: sender,permittedArrowDirections: .up)
+    }
+    
 }
 
