@@ -14,6 +14,12 @@ class ViewController: UIViewController {
     let heartIconImage:UIImage = UIImage(named: "heart_icon")!
     var darkPopupStyle:PopUpMenuStyle = PopUpMenuStyle()
     var customPopupStyle:PopUpMenuStyle = PopUpMenuStyle()
+    
+    let customG:PopUpMenuStyle = {
+        var result:PopUpMenuStyle = PopUpMenuStyle()
+        result.baseColor = UIColor.red
+        return result
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()

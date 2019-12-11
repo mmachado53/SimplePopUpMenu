@@ -93,7 +93,16 @@ public class PopUpMenuUIViewControler: UIViewController{
         
     }
     
-    
+    /**
+     Present the PopUpMenuUIViewControler.
+     - Parameters:
+     - menuIdentifier: Simple text identifier
+     - viewController: The presenter UIViewController
+     - items: Menu items
+     - sourceView:
+     - permittedArrowDirections:
+     - sourceRect: Use if require a custom position
+     */
     public func showMenu(
         menuIdentifier:String,
         viewController:UIViewController,
@@ -241,9 +250,17 @@ class PopUpMenuTableViewCell:UITableViewCell{
 
 
 public class PopUpMenuItem{
-    var uiImage:UIImage?
-    var title:String = ""
-    var tintImage:Bool = false
+    public var uiImage:UIImage?
+    public var title:String = ""
+    public var tintImage:Bool = false
+    /**
+     Initialize instance of PopUpMenuItem.
+     - Parameters:
+     - title: text of menu item
+     - uiImage: Optional icon image
+     - tintImage: if is true the icon image will be tinten with the color of the text, default es false
+     - Returns: A PopUpMenuItem instanse.
+     */
     public init(title:String,uiImage:UIImage? = nil,tintImage:Bool = false) {
         self.title = title
         self.uiImage = uiImage
