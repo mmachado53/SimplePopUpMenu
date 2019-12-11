@@ -248,9 +248,7 @@ public class PopUpMenuItem{
         self.title = title
         self.uiImage = uiImage
         self.tintImage = tintImage
-        if(self.tintImage){
-            self.uiImage = uiImage?.withRenderingMode(.alwaysTemplate)
-        }
+        self.uiImage = uiImage?.withRenderingMode(self.tintImage ? .alwaysTemplate : .alwaysOriginal)
     }
 }
 
