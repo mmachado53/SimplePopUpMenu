@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SimplePopUpMenu
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        var popUpMenuStyle:PopUpMenuStyle = PopUpMenuStyle()
+        popUpMenuStyle.baseColor = UIColor.white
+        popUpMenuStyle.textColor = UIColor.black
+        popUpMenuStyle.headerTextColor = UIColor.white
+        popUpMenuStyle.headerColor = UIColor.black
+        popUpMenuStyle.itemSeparatorColor = UIColor.black
+        popUpMenuStyle.selectedBackgroundColor = UIColor.black.withAlphaComponent(0.1)
+        PopUpMenuUIViewControler.globalStyle = popUpMenuStyle
         return true
     }
 
